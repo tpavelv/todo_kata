@@ -3,12 +3,16 @@ import "./task-list.css";
 
 import Task from "../task";
 
-const TaskList = ({ todos, onDeleted }) => {
+const TaskList = ({ todos, onDeleted, onToggleDone }) => {
   const elements = todos.map((el) => {
     const { id } = el;
     return (
       <li className={el.status} key={el.id}>
-        <Task {...el} onDeleted={() => onDeleted(id)} />
+        <Task
+          {...el}
+          onDeleted={() => onDeleted(id)}
+          onToggleDone={() => onToggleDone(id)}
+        />
         {el.status === "editing" && (
           <input type="text" className="edit" defaultValue={el.label} />
         )}

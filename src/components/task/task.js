@@ -4,19 +4,8 @@ import { formatDistance } from "date-fns";
 import { ru } from "date-fns/locale";
 
 export default class Task extends Component {
-  state = {
-    done: this.props.done ? true : false,
-  };
-
-  onLabelClick = () => {
-    this.setState(({ done }) => {
-      return { done: !done };
-    });
-  };
-
   render() {
-    const { label, time, onDeleted } = this.props;
-    const { done } = this.state;
+    const { label, time, done, onDeleted, onToggleDone } = this.props;
 
     const timeToNow = formatDistance(time, new Date(), {
       addSuffix: true,
@@ -27,16 +16,14 @@ export default class Task extends Component {
       classNames += " done";
     }
     return (
-      <div
-        className={classNames}
-        // onClick={(e) => {
-        //   if (e.target.nodeName === "BUTTON") {
-        //     console.log("button");
-        //   } else this.onLabelClick();
-        // }}
-      >
-        <input className="toggle" type="checkbox" />
-        <label onClick={this.onLabelClick}>
+      <div className={classNames}>
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={done}
+          onChange={onToggleDone}
+        />
+        <label onClick={onToggleDone}>
           <span className="description">{label}</span>
           <span className="created">{timeToNow}</span>
         </label>
