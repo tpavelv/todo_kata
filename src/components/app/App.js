@@ -86,13 +86,14 @@ export default class App extends Component {
   };
 
   dataFilter = (value) => {
-    if (value === "active") {
-      return this.state.data.filter((el) => !el.done);
+    switch (value) {
+      case "active":
+        return this.state.data.filter((el) => !el.done);
+      case "done":
+        return this.state.data.filter((el) => el.done);
+      default:
+        return this.state.data;
     }
-    if (value === "done") {
-      return this.state.data.filter((el) => el.done);
-    }
-    return this.state.data;
   };
 
   render() {

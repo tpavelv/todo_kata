@@ -1,26 +1,6 @@
 import React, { Component } from "react";
 import "./task-filter.css";
 
-// const TaskFilter = () => {
-//   return (
-//     <ul className="filters" onClick={(e) => console.log(e.target.dataset.type)}>
-//       <li>
-//         <button className="selected" data-type="all">
-//           All
-//         </button>
-//       </li>
-//       <li>
-//         <button data-type="active">Active</button>
-//       </li>
-//       <li>
-//         <button data-type="done">Completed</button>
-//       </li>
-//     </ul>
-//   );
-// };
-
-// export default TaskFilter;
-
 export default class TaskFilter extends Component {
   finalClassName(value, dataAtr) {
     if (value === dataAtr) {
