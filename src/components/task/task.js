@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import "./task.css";
-import { formatDistance } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ru } from "date-fns/locale";
 
 export default class Task extends Component {
   render() {
     const { label, time, done, onDeleted, onToggleDone } = this.props;
 
-    const timeToNow = formatDistance(time, new Date(), {
+    const timeToNow = formatDistanceToNow(time, {
       addSuffix: true,
       locale: ru,
     });
+
     let classNames = "view";
     if (done) {
       classNames += " done";
