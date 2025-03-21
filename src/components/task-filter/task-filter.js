@@ -1,7 +1,16 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import "./task-filter.css";
 
 export default class TaskFilter extends Component {
+  static defaultProps = {
+    activeFilter: "all",
+  };
+  static propTypes = {
+    changeFilter: PropTypes.func.isRequired,
+    activeFilter: PropTypes.string,
+  };
+
   finalClassName(value, dataAtr) {
     if (value === dataAtr) {
       return "selected";

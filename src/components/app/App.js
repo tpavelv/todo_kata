@@ -14,12 +14,13 @@ export default class App extends Component {
         time: new Date(2024, 3, 9),
         done: true,
         id: 1,
+        edit: false,
       },
       {
         label: "Editing task",
         time: new Date(2025, 3, 15),
         done: false,
-        status: "editing",
+        edit: false,
         id: 2,
       },
       {
@@ -27,9 +28,11 @@ export default class App extends Component {
         time: new Date(2025, 2, 15),
         done: false,
         id: 3,
+        edit: false,
       },
       this.createItem("Рисование"),
     ],
+
     activeFilter: "all",
   };
 
@@ -39,6 +42,7 @@ export default class App extends Component {
       time: new Date(),
       done: false,
       id: this.maxId++,
+      edit: false,
     };
   }
 
@@ -60,13 +64,26 @@ export default class App extends Component {
     });
   };
 
+  editItem = (id, newLabel) => {
+    this.setState(({ data }) => {
+      const newArr = [...data];
+      const idx = newArr.findIndex((el) => el.id === id);
+      newArr[idx].label = newLabel;
+      return { data: newArr };
+    });
+  };
+
   toggleProperty(arr, id, propName) {
     const newArr = [...arr];
     const idx = newArr.findIndex((el) => el.id === id);
     newArr[idx][propName] = !newArr[idx][propName];
     return newArr;
   }
-
+  toggleEdit = (id) => {
+    this.setState(({ data }) => {
+      return { data: this.toggleProperty(data, id, "edit") };
+    });
+  };
   toggleDone = (id) => {
     this.setState(({ data }) => {
       return { data: this.toggleProperty(data, id, "done") };
@@ -106,12 +123,16 @@ export default class App extends Component {
           <NewTaskForm onAddedItem={this.addItem} />
         </header>
         <section className="main">
+          <h1>{this.state.data[0].edit}</h1>
           <TaskList
             todos={renderData}
             onDeleted={this.deleteItem}
             onToggleDone={this.toggleDone}
             onCreateItems={this.createItem}
+            onToggleEdit={this.toggleEdit}
+            onEditItem={this.editItem}
           />
+
           <Footer
             count={activeCount}
             onClear={this.clearDoneItems}
