@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import "./new-task-form.css";
-
+import PropTypes from "prop-types";
 export default class NewTaskForm extends Component {
   state = {
     label: "",
   };
-
+  static propTypes = {
+    onAddedItem: PropTypes.func.isRequired,
+  };
   changeLabel = (e) => {
     this.setState(() => {
       return { label: e.target.value };
@@ -14,7 +16,11 @@ export default class NewTaskForm extends Component {
 
   submitForm = (e) => {
     e.preventDefault();
-    this.props.onAddedItem(this.state.label);
+    if (!this.state.label.trim()) {
+      alert("Нельзя добавить пустую задачу");
+    } else {
+      this.props.onAddedItem(this.state.label);
+    }
     this.setState(() => {
       return { label: "" };
     });

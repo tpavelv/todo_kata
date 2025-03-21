@@ -95,11 +95,6 @@
   color: #4d4d4d;
 }
 
-/* .todo-list li.completed label .description {
-  color: #cdcdcd;
-  text-decoration: line-through;
-} */
-
 .todo-list li .done label .description {
   color: #cdcdcd;
   text-decoration: line-through;
