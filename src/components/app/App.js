@@ -11,7 +11,7 @@ export default class App extends Component {
   state = {
     data: [
       {
-        label: 'Completed task',
+        label: 'Completed task new',
         time: new Date(2024, 3, 9),
         done: true,
         id: 1,
