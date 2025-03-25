@@ -1,56 +1,45 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import "./task-filter.css";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import './task-filter.css'
 
 export default class TaskFilter extends Component {
   static defaultProps = {
-    activeFilter: "all",
-  };
+    activeFilter: 'all',
+  }
+
   static propTypes = {
     changeFilter: PropTypes.func.isRequired,
     activeFilter: PropTypes.string,
-  };
-
-  finalClassName(value, dataAtr) {
-    if (value === dataAtr) {
-      return "selected";
-    } else {
-      return "";
-    }
   }
+
+  static finalClassName(value, dataAtr) {
+    if (value === dataAtr) {
+      return 'selected'
+    }
+    return ''
+  }
+
   render() {
-    const { changeFilter, activeFilter } = this.props;
+    const { changeFilter, activeFilter } = this.props
 
     return (
-      <ul
-        className="filters"
-        onClick={(e) => changeFilter(e.target.dataset.type)}
-      >
+      <ul className="filters" onClick={(e) => changeFilter(e.target.dataset.type)}>
         <li>
-          <button
-            className={this.finalClassName(activeFilter, "all")}
-            data-type="all"
-          >
+          <button className={TaskFilter.finalClassName(activeFilter, 'all')} data-type="all">
             All
           </button>
         </li>
         <li>
-          <button
-            data-type="active"
-            className={this.finalClassName(activeFilter, "active")}
-          >
+          <button data-type="active" className={TaskFilter.finalClassName(activeFilter, 'active')}>
             Active
           </button>
         </li>
         <li>
-          <button
-            data-type="done"
-            className={this.finalClassName(activeFilter, "done")}
-          >
+          <button data-type="done" className={TaskFilter.finalClassName(activeFilter, 'done')}>
             Completed
           </button>
         </li>
       </ul>
-    );
+    )
   }
 }

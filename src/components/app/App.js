@@ -1,121 +1,115 @@
-import React, { Component } from "react";
-import "./App.css";
+import React, { Component } from 'react'
+import './App.css'
 
-import NewTaskForm from "../new-task-form";
-import TaskList from "../task-list";
-import Footer from "../footer";
+import NewTaskForm from '../new-task-form'
+import TaskList from '../task-list'
+import Footer from '../footer'
 
 export default class App extends Component {
-  maxId = 100;
+  maxId = 100
+
   state = {
     data: [
       {
-        label: "Completed task",
+        label: 'Completed task',
         time: new Date(2024, 3, 9),
         done: true,
         id: 1,
         edit: false,
       },
       {
-        label: "Editing task",
+        label: 'Editing task',
         time: new Date(2025, 3, 15),
         done: false,
         edit: false,
         id: 2,
       },
       {
-        label: "Active task ",
+        label: 'Active task ',
         time: new Date(2025, 2, 15),
         done: false,
         id: 3,
         edit: false,
       },
-      this.createItem("Рисование"),
+      this.createItem('Рисование'),
     ],
 
-    activeFilter: "all",
-  };
+    activeFilter: 'all',
+  }
 
   createItem(label) {
+    this.maxId += 1
     return {
-      label: label,
+      label,
       time: new Date(),
       done: false,
-      id: this.maxId++,
+      id: this.maxId,
       edit: false,
-    };
+    }
   }
 
   addItem = (text) => {
     this.setState(({ data }) => {
-      const newArr = [...data, this.createItem(text)];
-      return { data: newArr };
-    });
-  };
+      const newArr = [...data, this.createItem(text)]
+      return { data: newArr }
+    })
+  }
 
   deleteItem = (id) => {
     this.setState(({ data }) => {
-      const newData = data.filter((el) => {
-        return el.id !== id;
-      });
+      const newData = data.filter((el) => el.id !== id)
       return {
         data: newData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   editItem = (id, newLabel) => {
     this.setState(({ data }) => {
-      const newArr = [...data];
-      const idx = newArr.findIndex((el) => el.id === id);
-      newArr[idx].label = newLabel;
-      return { data: newArr };
-    });
-  };
-
-  toggleProperty(arr, id, propName) {
-    const newArr = [...arr];
-    const idx = newArr.findIndex((el) => el.id === id);
-    newArr[idx][propName] = !newArr[idx][propName];
-    return newArr;
+      const newArr = [...data]
+      const idx = newArr.findIndex((el) => el.id === id)
+      newArr[idx].label = newLabel
+      return { data: newArr }
+    })
   }
+
+  static toggleProperty(arr, id, propName) {
+    const newArr = [...arr]
+    const idx = newArr.findIndex((el) => el.id === id)
+    newArr[idx][propName] = !newArr[idx][propName]
+    return newArr
+  }
+
   toggleEdit = (id) => {
-    this.setState(({ data }) => {
-      return { data: this.toggleProperty(data, id, "edit") };
-    });
-  };
+    this.setState(({ data }) => ({ data: App.toggleProperty(data, id, 'edit') }))
+  }
+
   toggleDone = (id) => {
-    this.setState(({ data }) => {
-      return { data: this.toggleProperty(data, id, "done") };
-    });
-  };
+    this.setState(({ data }) => ({ data: App.toggleProperty(data, id, 'done') }))
+  }
 
   clearDoneItems = () => {
-    this.setState(({ data }) => {
-      return { data: data.filter((el) => !el.done) };
-    });
-  };
+    this.setState(({ data }) => ({ data: data.filter((el) => !el.done) }))
+  }
 
   changeActiveFilter = (value) => {
-    this.setState(() => {
-      return { activeFilter: value };
-    });
-  };
+    this.setState(() => ({ activeFilter: value }))
+  }
 
   dataFilter = (value) => {
     switch (value) {
-      case "active":
-        return this.state.data.filter((el) => !el.done);
-      case "done":
-        return this.state.data.filter((el) => el.done);
+      case 'active':
+        return this.state.data.filter((el) => !el.done)
+      case 'done':
+        return this.state.data.filter((el) => el.done)
       default:
-        return this.state.data;
+        return this.state.data
     }
-  };
+  }
 
   render() {
-    const activeCount = this.state.data.filter((el) => !el.done).length;
-    const renderData = this.dataFilter(this.state.activeFilter);
+    const activeCount = this.state.data.filter((el) => !el.done).length
+    const renderData = this.dataFilter(this.state.activeFilter)
     return (
       <div className="App">
         <header className="header">
@@ -141,6 +135,6 @@ export default class App extends Component {
           />
         </section>
       </div>
-    );
+    )
   }
 }

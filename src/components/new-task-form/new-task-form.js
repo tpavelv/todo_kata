@@ -1,30 +1,29 @@
-import React, { Component } from "react";
-import "./new-task-form.css";
-import PropTypes from "prop-types";
+import React, { Component } from 'react'
+import './new-task-form.css'
+import PropTypes from 'prop-types'
+
 export default class NewTaskForm extends Component {
   state = {
-    label: "",
-  };
+    label: '',
+  }
+
   static propTypes = {
     onAddedItem: PropTypes.func.isRequired,
-  };
+  }
+
   changeLabel = (e) => {
-    this.setState(() => {
-      return { label: e.target.value };
-    });
-  };
+    this.setState(() => ({ label: e.target.value }))
+  }
 
   submitForm = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!this.state.label.trim()) {
-      alert("Нельзя добавить пустую задачу");
+      // alert('Нельзя добавить пустую задачу')
     } else {
-      this.props.onAddedItem(this.state.label);
+      this.props.onAddedItem(this.state.label)
     }
-    this.setState(() => {
-      return { label: "" };
-    });
-  };
+    this.setState(() => ({ label: '' }))
+  }
 
   render() {
     return (
@@ -37,6 +36,6 @@ export default class NewTaskForm extends Component {
           value={this.state.label}
         />
       </form>
-    );
+    )
   }
 }

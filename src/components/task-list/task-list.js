@@ -1,39 +1,37 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import "./task-list.css";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import './task-list.css'
 
-import Task from "../task";
+import Task from '../task'
 
 export default class TaskList extends Component {
   state = {
     labelCash: null,
-  };
+  }
+
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object),
-  };
+  }
 
   changeLabel = (e) => {
-    this.setState(() => {
-      return { labelCash: e.target.value };
-    });
-  };
+    this.setState(() => ({ labelCash: e.target.value }))
+  }
 
   render() {
-    const { todos, onDeleted, onToggleDone, onToggleEdit, onEditItem } =
-      this.props;
+    const { todos, onDeleted, onToggleDone, onToggleEdit, onEditItem } = this.props
 
     const onSubmitForm = (e, id) => {
-      e.preventDefault();
+      e.preventDefault()
       if (this.state.labelCash) {
-        onEditItem(id, this.state.labelCash);
+        onEditItem(id, this.state.labelCash)
       }
-      onToggleEdit(id);
-    };
+      onToggleEdit(id)
+    }
 
     const elements = todos.map((el) => {
-      const { id } = el;
+      const { id } = el
       return (
-        <li className={el.edit ? "editing" : null} key={el.id}>
+        <li className={el.edit ? 'editing' : null} key={el.id}>
           <Task
             {...el}
             onDeleted={() => onDeleted(id)}
@@ -42,18 +40,12 @@ export default class TaskList extends Component {
           />
           {el.edit && (
             <form onSubmit={(e) => onSubmitForm(e, el.id)}>
-              <input
-                type="text"
-                className="edit"
-                defaultValue={el.label}
-                onChange={this.changeLabel}
-                autoFocus
-              />
+              <input type="text" className="edit" defaultValue={el.label} onChange={this.changeLabel} autoFocus />
             </form>
           )}
         </li>
-      );
-    });
-    return <ul className="todo-list">{elements}</ul>;
+      )
+    })
+    return <ul className="todo-list">{elements}</ul>
   }
 }
