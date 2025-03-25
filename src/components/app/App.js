@@ -117,7 +117,6 @@ export default class App extends Component {
           <NewTaskForm onAddedItem={this.addItem} />
         </header>
         <section className="main">
-          <h1>{this.state.data[0].edit}</h1>
           <TaskList
             todos={renderData}
             onDeleted={this.deleteItem}
