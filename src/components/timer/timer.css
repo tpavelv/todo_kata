@@ -1,0 +1,40 @@
+.timer {
+  font-size: 13px;
+  color: gray;
+  position: relative;
+  margin-left: 40px;
+  /* box-sizing: border-box; */
+  /* font-size: 14px; */
+}
+/* .todo-list li .icon {
+  width: 30px;
+  height: 40px;
+  font-size: 34px;
+  color: #cc9a9a;
+  margin: auto 0;
+  transition: color 0.2s ease-out;
+  cursor: pointer;
+} */
+.todo-list li .timer .icon-pause,
+.todo-list li .timer .icon-play {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  position: absolute;
+}
+.icon-play {
+  top: 0;
+  left: -40px;
+}
+.icon-pause {
+  top: 0;
+  left: -20px;
+}
+.icon-pause:after {
+  content: '⏸';
+}
+
+.icon-play:after {
+  content: '▶';
+}

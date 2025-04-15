@@ -4,6 +4,8 @@ import './task.css'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
+import Timer from '../timer'
+
 export default class Task extends Component {
   static defaultProps = {
     time: new Date(),
@@ -20,7 +22,8 @@ export default class Task extends Component {
   }
 
   render() {
-    const { label, time, done, onDeleted, onToggleDone, onToggleEdit } = this.props
+    const { label, time, done, onDeleted, onToggleDone, onToggleEdit, timer } = this.props
+    const { onStartTimer, onPausedTimer } = this.props
 
     const timeToNow = formatDistanceToNow(time, {
       addSuffix: true,
@@ -34,8 +37,11 @@ export default class Task extends Component {
     return (
       <div className={classNames}>
         <input className="toggle" type="checkbox" checked={done} onChange={onToggleDone} />
-        <label onClick={onToggleDone}>
-          <span className="description">{label}</span>
+        <label>
+          <span className="description" onClick={onToggleDone}>
+            {label}
+          </span>
+          <Timer timer={timer} onStartTimer={onStartTimer} onPausedTimer={onPausedTimer} />
           <span className="created">{timeToNow}</span>
         </label>
         <button className="icon icon-edit" onClick={onToggleEdit}></button>
