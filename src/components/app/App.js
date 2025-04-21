@@ -26,7 +26,7 @@ export default class App extends Component {
         done: false,
         edit: false,
         id: 2,
-        timer: 60000,
+        timer: 65000,
       },
       {
         label: 'Active task ',
@@ -175,9 +175,6 @@ export default class App extends Component {
             onCreateItems={this.createItem}
             onToggleEdit={this.toggleEdit}
             onEditItem={this.editItem}
-            onStartTimer={this.startTimer}
-            onPausedTimer={this.pausedTimer}
-            timerId={this.intervalId}
           />
 
           <Footer

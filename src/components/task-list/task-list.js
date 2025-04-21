@@ -18,8 +18,7 @@ export default class TaskList extends Component {
   }
 
   render() {
-    const { todos, onDeleted, onToggleDone, onToggleEdit, onEditItem, timerId } = this.props
-    const { onStartTimer, onPausedTimer } = this.props
+    const { todos, onDeleted, onToggleDone, onToggleEdit, onEditItem } = this.props
 
     const onSubmitForm = (e, id) => {
       e.preventDefault()
@@ -38,9 +37,6 @@ export default class TaskList extends Component {
             onDeleted={() => onDeleted(id)}
             onToggleDone={() => onToggleDone(id)}
             onToggleEdit={() => onToggleEdit(id)}
-            onStartTimer={() => onStartTimer(id)}
-            onPausedTimer={() => onPausedTimer(id)}
-            timerId={timerId}
           />
           {el.edit && (
             <form onSubmit={(e) => onSubmitForm(e, el.id)}>
