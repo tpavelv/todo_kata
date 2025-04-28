@@ -3,13 +3,13 @@ import './timer.css'
 
 export default class Timer extends Component {
   state = {
-    timer: this.props.timer,
+    showTime: this.props.timer,
   }
 
   timerId = null
 
   static convertTime(ms) {
-    const totalSeconds = Math.floor(ms / 1000)
+    const totalSeconds = Math.round(ms / 1000)
     const minutes = Math.floor(totalSeconds / 60)
     const seconds = totalSeconds % 60
 
@@ -23,15 +23,19 @@ export default class Timer extends Component {
     if (this.timerId) {
       clearInterval(this.timerId)
     }
+
+    const startTime = Date.now()
+    const endTime = startTime + this.state.showTime
     this.timerId = setInterval(() => {
-      this.setState(({ timer }) => {
-        if (timer <= 1000) {
-          clearInterval(this.timerId)
-          this.timerId = null
-          return { timer: 0 }
-        }
-        return { timer: timer - 1000 }
-      })
+      const nowTime = Date.now()
+      const remainingTime = endTime - nowTime
+      if (remainingTime <= 1000) {
+        clearInterval(this.timerId)
+        this.timerId = null
+        this.setState({ showTime: 0 })
+      } else {
+        this.setState({ showTime: remainingTime })
+      }
     }, 1000)
   }
 
@@ -41,7 +45,6 @@ export default class Timer extends Component {
   }
 
   onPausedTimer = () => {
-    console.log(this.timerId)
     clearInterval(this.timerId)
     this.timerId = null
   }
@@ -52,7 +55,7 @@ export default class Timer extends Component {
         <button className="icon icon-play " onClick={this.onStartTimer}></button>
         <button className="icon icon-pause" onClick={this.onPausedTimer}></button>
 
-        {Timer.convertTime(this.state.timer)}
+        {Timer.convertTime(this.state.showTime)}
       </span>
     )
   }
