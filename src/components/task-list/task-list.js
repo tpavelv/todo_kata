@@ -1,51 +1,47 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import './task-list.css'
 
 import Task from '../task'
 
-export default class TaskList extends Component {
-  state = {
-    labelCash: null,
+const TaskList = ({ todos, onDeleted, onToggleDone, onToggleEdit, onEditItem }) => {
+  const [labelCash, setLabelCash] = useState(null)
+
+  const changeLabel = (e) => {
+    setLabelCash(e.target.value)
   }
 
-  static propTypes = {
-    todos: PropTypes.arrayOf(PropTypes.object),
-  }
-
-  changeLabel = (e) => {
-    this.setState(() => ({ labelCash: e.target.value }))
-  }
-
-  render() {
-    const { todos, onDeleted, onToggleDone, onToggleEdit, onEditItem } = this.props
-
-    const onSubmitForm = (e, id) => {
-      e.preventDefault()
-      if (this.state.labelCash) {
-        onEditItem(id, this.state.labelCash)
-      }
-      onToggleEdit(id)
+  const onSubmitForm = (e, id) => {
+    e.preventDefault()
+    if (labelCash) {
+      onEditItem(id, labelCash)
     }
-
-    const elements = todos.map((el) => {
-      const { id } = el
-      return (
-        <li className={el.edit ? 'editing' : null} key={el.id}>
-          <Task
-            {...el}
-            onDeleted={() => onDeleted(id)}
-            onToggleDone={() => onToggleDone(id)}
-            onToggleEdit={() => onToggleEdit(id)}
-          />
-          {el.edit && (
-            <form onSubmit={(e) => onSubmitForm(e, el.id)}>
-              <input type="text" className="edit" defaultValue={el.label} onChange={this.changeLabel} autoFocus />
-            </form>
-          )}
-        </li>
-      )
-    })
-    return <ul className="todo-list">{elements}</ul>
+    onToggleEdit(id)
   }
+
+  const elements = todos.map((el) => {
+    const { id } = el
+    return (
+      <li className={el.edit ? 'editing' : null} key={el.id}>
+        <Task
+          {...el}
+          onDeleted={() => onDeleted(id)}
+          onToggleDone={() => onToggleDone(id)}
+          onToggleEdit={() => onToggleEdit(id)}
+        />
+        {el.edit && (
+          <form onSubmit={(e) => onSubmitForm(e, el.id)}>
+            <input type="text" className="edit" defaultValue={el.label} onChange={changeLabel} autoFocus />
+          </form>
+        )}
+      </li>
+    )
+  })
+  return <ul className="todo-list">{elements}</ul>
 }
+
+TaskList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
+}
+
+export default TaskList

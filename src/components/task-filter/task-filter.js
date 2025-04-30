@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './task-filter.css'
 
-const TaskFilter = (props) => {
-  const { changeFilter, activeFilter } = props
-
+const TaskFilter = ({ changeFilter, activeFilter = 'all' }) => {
   const finalClassName = (value, dataAtr) => {
     if (value === dataAtr) {
       return 'selected'
@@ -31,10 +29,6 @@ const TaskFilter = (props) => {
       </li>
     </ul>
   )
-}
-
-TaskFilter.defaultProps = {
-  activeFilter: 'all',
 }
 
 TaskFilter.propTypes = {

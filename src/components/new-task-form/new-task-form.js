@@ -1,87 +1,76 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import './new-task-form.css'
 import PropTypes from 'prop-types'
 
-export default class NewTaskForm extends Component {
-  state = {
-    label: '',
-    minutes: '',
-    seconds: '',
+const NewTaskForm = ({ onAddedItem }) => {
+  const [label, setLabel] = useState('')
+  const [minutes, setMinutes] = useState('')
+  const [seconds, setSeconds] = useState('')
+
+  const changeLabel = (e) => {
+    setLabel(e.target.value)
   }
 
-  static propTypes = {
-    onAddedItem: PropTypes.func.isRequired,
-  }
-
-  changeLabel = (e) => {
-    this.setState(() => ({ label: e.target.value }))
-  }
-
-  changeTime = (e, min) => {
+  const changeTime = (e, min) => {
     if (min) {
-      this.setState(() => ({ minutes: e.target.value }))
+      setMinutes(e.target.value)
     } else {
-      this.setState(() => ({ seconds: e.target.value }))
+      setSeconds(e.target.value)
     }
   }
 
-  convertTime = () => (+this.state.minutes * 60 + +this.state.seconds) * 1000
+  const convertTime = () => (+minutes * 60 + +seconds) * 1000
 
-  validateForm = () => {
+  const validateForm = () => {
     let message
-    if (!this.state.label.trim()) {
+    if (!label.trim()) {
       message = 'Нельзя добавить пустую задачу'
     }
-    if (!this.state.minutes.trim() && !this.state.seconds.trim()) {
+    if (!minutes.trim() && !seconds.trim()) {
       message = 'Добавьте время выполнения задачи'
     }
-    if (Number.isNaN(Number(this.state.minutes))) {
+    if (Number.isNaN(Number(minutes))) {
       message = 'Не корректно указаны минуты'
     }
-    if (Number.isNaN(Number(this.state.seconds))) {
+    if (Number.isNaN(Number(seconds))) {
       message = 'Не корректно указаны секунды'
     }
     return message
   }
 
-  submitForm = (e) => {
+  const submitForm = (e) => {
     e.preventDefault()
-    const message = this.validateForm()
+    const message = validateForm()
 
     if (message) {
       alert(message)
     } else {
-      this.props.onAddedItem(this.state.label, this.convertTime())
+      onAddedItem(label, convertTime())
     }
-    this.setState(() => ({ label: '', minutes: '', seconds: '' }))
+
+    setLabel('')
+    setMinutes('')
+    setSeconds('')
   }
 
-  render() {
-    return (
-      <form onSubmit={this.submitForm} className="new-todo-form">
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          onChange={this.changeLabel}
-          value={this.state.label}
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Min"
-          onChange={(e) => {
-            this.changeTime(e, true)
-          }}
-          value={this.state.minutes}
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Sec"
-          onChange={this.changeTime}
-          value={this.state.seconds}
-        />
-        <button type="submit" />
-      </form>
-    )
-  }
+  return (
+    <form onSubmit={submitForm} className="new-todo-form">
+      <input className="new-todo" placeholder="What needs to be done?" autoFocus onChange={changeLabel} value={label} />
+      <input
+        className="new-todo-form__timer"
+        placeholder="Min"
+        onChange={(e) => {
+          changeTime(e, true)
+        }}
+        value={minutes}
+      />
+      <input className="new-todo-form__timer" placeholder="Sec" onChange={changeTime} value={seconds} />
+      <button type="submit" />
+    </form>
+  )
 }
+
+NewTaskForm.propTypes = {
+  onAddedItem: PropTypes.func.isRequired,
+}
+export default NewTaskForm
