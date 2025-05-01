@@ -1,157 +1,143 @@
-import React, { Component } from 'react'
+import React, { useRef, useState } from 'react'
 import './App.css'
-
-// import { interval } from 'date-fns'
 
 import NewTaskForm from '../new-task-form'
 import TaskList from '../task-list'
 import Footer from '../footer'
 
-export default class App extends Component {
-  maxId = 100
+const startData = [
+  {
+    label: 'Completed ',
+    time: new Date(2024, 3, 9),
+    done: true,
+    id: 1,
+    edit: false,
+    timer: null,
+  },
+  {
+    label: 'Editing task',
+    time: new Date(2025, 3, 15),
+    done: false,
+    edit: false,
+    id: 2,
+    timer: 65000,
+  },
+  {
+    label: 'Active task ',
+    time: new Date(2025, 2, 15),
+    done: false,
+    id: 3,
+    edit: false,
+    timer: 60000,
+  },
+]
 
-  state = {
-    data: [
-      {
-        label: 'Completed ',
-        time: new Date(2024, 3, 9),
-        done: true,
-        id: 1,
-        edit: false,
-        timer: null,
-      },
-      {
-        label: 'Editing task',
-        time: new Date(2025, 3, 15),
-        done: false,
-        edit: false,
-        id: 2,
-        timer: 65000,
-      },
-      {
-        label: 'Active task ',
-        time: new Date(2025, 2, 15),
-        done: false,
-        id: 3,
-        edit: false,
-        timer: 60000,
-      },
-      this.createItem('Рисование', 60000),
-    ],
+const App = () => {
+  const maxIdRef = useRef(100)
 
-    activeFilter: 'all',
-  }
+  const [data, setData] = useState(startData)
 
-  intervalId = null
+  const [activeFilter, setActiveFilter] = useState('all')
 
-  createItem(label, timer) {
-    this.maxId += 1
+  const createItem = (label, timer) => {
+    maxIdRef.current += 1
     return {
       label,
       timer,
       time: new Date(),
       done: false,
-      id: this.maxId,
+      id: maxIdRef.current,
       edit: false,
     }
   }
 
-  addItem = (text, time) => {
-    this.setState(({ data }) => {
-      const newArr = [...data, this.createItem(text, time)]
-      return { data: newArr }
+  const addItem = (text, time) => {
+    setData((prevData) => {
+      const newArr = [...prevData, createItem(text, time)]
+      return newArr
     })
   }
 
-  deleteItem = (id) => {
-    clearTimeout(this.intervalId)
-
-    this.setState(({ data }) => {
-      const newData = data.filter((el) => el.id !== id)
-      return {
-        data: newData,
-      }
+  const deleteItem = (id) => {
+    // clearTimeout(intervalIdRef.current)
+    setData((prevData) => {
+      const newData = prevData.filter((el) => el.id !== id)
+      return newData
     })
   }
 
-  editItem = (id, newLabel) => {
-    this.setState(({ data }) => {
-      const newArr = [...data]
+  const editItem = (id, newLabel) => {
+    setData((prevData) => {
+      const newArr = [...prevData]
       const idx = newArr.findIndex((el) => el.id === id)
       newArr[idx].label = newLabel
-      return { data: newArr }
+
+      return newArr
     })
   }
 
-  static toggleProperty(arr, id, propName) {
+  const toggleProperty = (arr, id, propName) => {
     const newArr = [...arr]
     const idx = newArr.findIndex((el) => el.id === id)
     newArr[idx][propName] = !newArr[idx][propName]
     return newArr
   }
 
-  static clearTimeoutInDoneTask(arr, id) {
-    const newArr = [...arr]
-    const idx = newArr.findIndex((el) => el.id === id)
-    newArr[idx].timer = null
-    return newArr
+  const toggleEdit = (id) => {
+    setData((prevData) => toggleProperty(prevData, id, 'edit'))
   }
 
-  toggleEdit = (id) => {
-    this.setState(({ data }) => ({ data: App.toggleProperty(data, id, 'edit') }))
+  const toggleDone = (id) => {
+    setData((prevData) => toggleProperty(prevData, id, 'done'))
   }
 
-  toggleDone = (id) => {
-    this.setState(({ data }) => ({ data: App.toggleProperty(data, id, 'done') }))
-    this.setState(({ data }) => ({ data: App.clearTimeoutInDoneTask(data, id) }))
+  const clearDoneItems = () => {
+    setData((prevData) => prevData.filter((el) => !el.done))
   }
 
-  clearDoneItems = () => {
-    this.setState(({ data }) => ({ data: data.filter((el) => !el.done) }))
+  const changeActiveFilter = (value) => {
+    setActiveFilter(value)
   }
 
-  changeActiveFilter = (value) => {
-    this.setState(() => ({ activeFilter: value }))
-  }
-
-  dataFilter = (value) => {
+  const dataFilter = (value) => {
     switch (value) {
       case 'active':
-        return this.state.data.filter((el) => !el.done)
+        return data.filter((el) => !el.done)
       case 'done':
-        return this.state.data.filter((el) => el.done)
+        return data.filter((el) => el.done)
       default:
-        return this.state.data
+        return data
     }
   }
 
-  render() {
-    const activeCount = this.state.data.filter((el) => !el.done).length
-    const renderData = this.dataFilter(this.state.activeFilter)
-    return (
-      <div className="App">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm onAddedItem={this.addItem} />
-        </header>
-        <section className="main">
-          <TaskList
-            todos={renderData}
-            onDeleted={this.deleteItem}
-            onToggleDone={this.toggleDone}
-            onCreateItems={this.createItem}
-            onToggleEdit={this.toggleEdit}
-            onEditItem={this.editItem}
-          />
+  const activeCount = data.filter((el) => !el.done).length
+  const renderData = dataFilter(activeFilter)
 
-          <Footer
-            count={activeCount}
-            onClear={this.clearDoneItems}
-            activeFilter={this.state.activeFilter}
-            changeFilter={this.changeActiveFilter}
-          />
-        </section>
-      </div>
-    )
-  }
+  return (
+    <div className="App">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm onAddedItem={addItem} />
+      </header>
+      <section className="main">
+        <TaskList
+          todos={renderData}
+          onDeleted={deleteItem}
+          onToggleDone={toggleDone}
+          onCreateItems={createItem}
+          onToggleEdit={toggleEdit}
+          onEditItem={editItem}
+        />
+
+        <Footer
+          count={activeCount}
+          onClear={clearDoneItems}
+          activeFilter={activeFilter}
+          changeFilter={changeActiveFilter}
+        />
+      </section>
+    </div>
+  )
 }
+
+export default App

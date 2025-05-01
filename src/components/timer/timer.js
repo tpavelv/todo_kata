@@ -16,7 +16,9 @@ const Timer = ({ timer }) => {
     return `${paddedMinutes}:${paddedSeconds}`
   }
 
-  const onStartTimer = () => {
+  const onStartTimer = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
     if (timerIdRef.current) {
       clearInterval(timerIdRef.current)
     }
@@ -36,7 +38,9 @@ const Timer = ({ timer }) => {
     }, 1000)
   }
 
-  const onPausedTimer = () => {
+  const onPausedTimer = (e) => {
+    e.stopPropagation()
+
     clearInterval(timerIdRef.current)
     timerIdRef.current = null
   }

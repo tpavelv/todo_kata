@@ -23,13 +23,22 @@ const Task = (props) => {
   return (
     <div className={classNames}>
       <input className="toggle" type="checkbox" checked={done} onChange={onToggleDone} />
-      <label>
-        <span className="description" onClick={onToggleDone}>
+      <label onClick={(e) => e.stopPropagation()}>
+        <span
+          className="description"
+          onClick={(e) => {
+            console.log(e)
+            e.stopPropagation() // Останавливает событие, чтобы не запускать onStartTimer
+            onToggleDone()
+          }}
+        >
           {label}
         </span>
-        <Timer timer={timer} onStartTimer={onStartTimer} onPausedTimer={onPausedTimer} />
+
         <span className="created">{timeToNow}</span>
       </label>
+      <Timer timer={timer} onStartTimer={onStartTimer} onPausedTimer={onPausedTimer} />
+
       <button className="icon icon-edit" onClick={onToggleEdit}></button>
       <button className="icon icon-destroy" onClick={onDeleted}></button>
     </div>
