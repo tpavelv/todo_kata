@@ -125,39 +125,6 @@ export default class App extends Component {
     }
   }
 
-  startTimer = (id) => {
-    if (this.intervalId) {
-      clearTimeout(this.intervalId)
-    }
-
-    const newArr = [...this.state.data]
-    const idx = newArr.findIndex((el) => el.id === id)
-
-    const startTime = Date.now()
-    const targetTime = startTime + newArr[idx].timer
-
-    const tick = () => {
-      const now = Date.now()
-      const remaining = Math.max(0, targetTime - now)
-
-      newArr[idx].timer = remaining
-
-      this.setState({ data: newArr })
-
-      if (remaining > 0) {
-        this.intervalId = setTimeout(tick, 100)
-      } else {
-        clearTimeout(this.intervalId)
-      }
-    }
-
-    tick()
-  }
-
-  pausedTimer = () => {
-    clearTimeout(this.intervalId)
-  }
-
   render() {
     const activeCount = this.state.data.filter((el) => !el.done).length
     const renderData = this.dataFilter(this.state.activeFilter)

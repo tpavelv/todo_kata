@@ -3,8 +3,7 @@ import './timer.css'
 
 const Timer = ({ timer }) => {
   const [showTime, setShowTime] = useState(timer)
-  const ref = useRef(null)
-  let timerId = ref.current
+  const timerIdRef = useRef(null)
 
   const convertTime = (ms) => {
     const totalSeconds = Math.round(ms / 1000)
@@ -18,18 +17,18 @@ const Timer = ({ timer }) => {
   }
 
   const onStartTimer = () => {
-    if (timerId) {
-      clearInterval(timerId)
+    if (timerIdRef.current) {
+      clearInterval(timerIdRef.current)
     }
 
     const startTime = Date.now()
     const endTime = startTime + showTime
-    timerId = setInterval(() => {
+    timerIdRef.current = setInterval(() => {
       const nowTime = Date.now()
       const remainingTime = endTime - nowTime
       if (remainingTime <= 1000) {
-        clearInterval(timerId)
-        timerId = null
+        clearInterval(timerIdRef.current)
+        timerIdRef.current = null
         setShowTime(0)
       } else {
         setShowTime(remainingTime)
@@ -38,11 +37,11 @@ const Timer = ({ timer }) => {
   }
 
   const onPausedTimer = () => {
-    clearInterval(timerId)
-    timerId = null
+    clearInterval(timerIdRef.current)
+    timerIdRef.current = null
   }
 
-  useEffect(() => () => clearInterval(timerId), [])
+  useEffect(() => () => clearInterval(timerIdRef.current), [])
 
   return (
     <span className="timer">
